@@ -16,7 +16,7 @@ const LoginForm = () => {
       </div>
       <div>
         <span>
-          {"if You don't have an account "}{" "}
+          {"if You don't have an account. Go to "}{" "}
           <Link className="text-cyan-300 font-semibold underline text-sm" href={"/register"}>
             Register
           </Link>

@@ -1,8 +1,8 @@
 Completed
 
 - [x] @client: login
-- [ ] @client: register.
-- [ ] @client: For You - Home Page.
+- [x] @client: register.
+- [x] @client: For You - Home Page.
 - [ ] @client - new-canvas.
 
 Working

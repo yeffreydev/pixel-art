@@ -1,0 +1,1 @@
+- [] poder ampliar el canvas en x y en y.

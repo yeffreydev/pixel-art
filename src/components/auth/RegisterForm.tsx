@@ -1,19 +1,65 @@
+"use client";
+import { apiRegisterUser } from "@/api/auth";
 import Link from "next/link";
+import { FormEvent, useState } from "react";
 
 const RegisterForm = () => {
+  const [form, setForm] = useState({
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+    terms: true,
+  });
+
+  const handleChange = (e: FormEvent<HTMLInputElement>) => {
+    const { name, value, checked } = e.currentTarget;
+    if (name === "terms") return setForm((prev) => ({ ...form, [name]: checked }));
+    setForm((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const registerUser = async () => {
+    try {
+      const data = await apiRegisterUser(form);
+      if (!data) return alert("email or username is duplicated");
+      //save token on localstorage
+      if (window) {
+        window.localStorage.setItem("auth", JSON.stringify(data));
+      }
+      //add token to auth provider
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!form.terms) return alert("aceptar los terminos y condiciones");
+    registerUser();
+  };
+
   return (
-    <form className="flex flex-col gap-10 p-10">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 p-10">
       <div>
-        <input className="bg-opacity-0 bg-black border-b w-[300px] border-gray-400 py-2" type="text" placeholder="username" />
+        <input onChange={handleChange} value={form.username} name="username" className="bg-opacity-0 bg-black border-b w-[300px] border-gray-400 py-2" type="text" placeholder="username" />
       </div>
       <div>
-        <input className="bg-opacity-0 bg-black border-b w-[300px] border-gray-400 py-2" type="text" placeholder="email" />
+        <input onChange={handleChange} value={form.email} name="email" className="bg-opacity-0 bg-black border-b w-[300px] border-gray-400 py-2" type="text" placeholder="email" />
       </div>
       <div>
-        <input className="bg-opacity-0 bg-black border-b w-[300px] border-gray-400 py-2" type="password" placeholder="password" />
+        <input onChange={handleChange} value={form.password} name="password" className="bg-opacity-0 bg-black border-b w-[300px] border-gray-400 py-2" type="password" placeholder="password" />
+      </div>
+      <div>
+        <input
+          onChange={handleChange}
+          value={form.confirmPassword}
+          name="confirmPassword"
+          className="bg-opacity-0 bg-black border-b w-[300px] border-gray-400 py-2"
+          type="password"
+          placeholder="confirm password"
+        />
       </div>
       <div className="flex items-center gap-2">
-        <input className="" type="checkbox" placeholder="password" />
+        <input onChange={handleChange} checked={form.terms} name="terms" className="" type="checkbox" />
 
         <span>
           Accept our{" "}
